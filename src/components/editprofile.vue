@@ -56,7 +56,7 @@
                 <v-text-field disabled type="number" v-model="signup.phone" label="Phone Number"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field disabled type="number" v-model="signup.Reg_No" label="Reg No"></v-text-field>
+                <v-text-field disabled type="text" v-model="signup.Reg_No" label="Reg No"></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-text-field disabled v-model="signup.address" label="House Address" hint="example No 40 Akeem Salami street Ayobo Ipaja Lagos"

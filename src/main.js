@@ -9,7 +9,9 @@ import store from './store/index';
 import Auth from './components/auth/auth';
 import firebase from 'firebase';
 import firebasekey from './firebasekey'
+import VeeValidate from 'vee-validate';
 
+Vue.use(VeeValidate);
 Vue.use(Vuetify);
 Vue.use(Auth);
 

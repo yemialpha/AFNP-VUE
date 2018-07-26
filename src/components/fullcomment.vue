@@ -42,25 +42,27 @@
         {{forum.post}} 
         </v-card-text>                  
      </div>
-                <addcomment :forum = "forum"/>
-                        <v-expansion-panel focusable class="com" inset>
-                        <v-expansion-panel-content class="head" v-for="comment in comments" :key="comment.id">
-                            <div slot="header">
-                                 <v-list-tile avatar>
-                            <v-list-tile-content>
-                                <v-list-tile-title> {{comment.name}} {{comment.surname}}  </v-list-tile-title>
-                                <v-btn v-if="comment.userid == authid" outline color="red" small @click="deletecomment">delete</v-btn>
-                            </v-list-tile-content> 
-                            </v-list-tile>
-                            </div>
-                            <v-card>
-                            <v-card-text class="grey lighten-3"> {{comment.comment}}</v-card-text>
-                            </v-card>
-                        </v-expansion-panel-content>
-                         
-                           <v-card-text  v-if="comments == ''" >No Comment</v-card-text>
-                         
-                        </v-expansion-panel>
+        <v-expansion-panel focusable class="com" inset>
+        <v-expansion-panel-content class="head" v-for="comment in comments" :key="comment.id">
+            <div slot="header">
+                  <v-list-tile avatar>
+                    <v-list-tile-avatar>
+                        <img :src=comment.img />
+                      </v-list-tile-avatar>
+            <v-list-tile-content>
+                <v-list-tile-title> {{comment.name}} {{comment.surname}}  </v-list-tile-title>
+            </v-list-tile-content> 
+            </v-list-tile>
+            </div>
+            <v-card>
+            <v-card-text class="grey lighten-3"> {{comment.comment}}</v-card-text>
+              <v-divider></v-divider>
+              <v-btn v-if="comment.userid == authid" outline color="red" small @click="deletecomment(comment.id)">delete</v-btn>
+            </v-card>
+        </v-expansion-panel-content>
+            <v-card-text  v-if="comments == ''" >No Comment</v-card-text>
+        </v-expansion-panel>
+         <addcomment :forum = "forum"/>
      </v-layout>
 
           </v-flex>
@@ -91,8 +93,8 @@ import firebase from 'firebase'
          open () {
         this.$router.push('/')
       },
-      deletecomment(){
-        console.log('press')
+      deletecomment(key){
+        firebase.database().ref('Comment/'+  this.forum.id).child(key).remove()
       }
     },
     created() {
@@ -107,6 +109,7 @@ import firebase from 'firebase'
         id: key,
         name: obj[key].postedBy.first_name,
         surname: obj[key].postedBy.surname,
+        img: obj[key].postedBy.imgurl,
         userid: obj[key].postedBy.userid,
         time: obj[key].last_Time,
         comment: obj[key].comment

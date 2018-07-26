@@ -84,7 +84,7 @@
       <v-list class="pa-0">
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img src="https://firebasestorage.googleapis.com/v0/b/afpn-906a9.appspot.com/o/noimage.jpg?alt=media&token=a3be3edc-eb2c-4b40-9aaf-7542a130dfc4" />
+            <img :src=forum.img />
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{forum.name}} {{forum.surname}} </v-list-tile-title>
@@ -95,6 +95,9 @@
      <div class="con">
               <v-card-text>
                  {{forum.post}}
+
+                 <v-divider></v-divider>
+                <v-btn v-if="forum.postid == postedBy.userid" outline color="red" small @click="deletecomment(forum.id)">delete</v-btn>
               </v-card-text>
      </div>
         <v-content></v-content>
@@ -135,8 +138,11 @@ import swal from 'sweetalert'
       },
        form() {
         this.$router.push('/form')
-      }
-
+      },
+    deletecomment(key){
+      firebase.database().ref('Forum/').child(key).remove()
+      firebase.database().ref('Comment/' + key).remove()
+    }
     },
     computed: {
          user() {
@@ -146,7 +152,7 @@ import swal from 'sweetalert'
        return this.$store.getters.user
      }
     },
-    created() {
+    async mounted () {
       this.user
       this.$store.dispatch('getuser')
       firebase.database().ref('Forum/')
@@ -158,6 +164,8 @@ import swal from 'sweetalert'
         id: key,
         name: obj[key].postedBy.first_name,
         surname: obj[key].postedBy.surname,
+        img: obj[key].postedBy.imgurl,
+        postid: obj[key].postedBy.userid,
         time: obj[key].last_Time,
         post: obj[key].post
        

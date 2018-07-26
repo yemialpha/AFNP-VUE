@@ -140,7 +140,7 @@ import swal from 'sweetalert'
            this.$store.commit('setloading', false)
            this.clear()
             swal({
-          title: "Your Message is well receive we will get back to you as soon as possible Thanks",
+          title: "Your Message is well receive will we get back to you as soon as possible Thanks",
           text: "You clicked the button!",
           icon: "success",
           button: "Okay!",

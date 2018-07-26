@@ -84,6 +84,7 @@
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
          <v-btn color="pink" outline v-if="user.Status">Membership Status: Pending...</v-btn>
+         <v-btn color="pink" disabled outline>REG.NO{{user.Reg_No}}</v-btn>
         <br>
         <fee/>
         <v-list-tile>

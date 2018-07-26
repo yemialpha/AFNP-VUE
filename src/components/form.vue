@@ -14,12 +14,12 @@
   </v-card>
 <v-card v-else>
      <v-card-title>
-          <span class="headline">Membership Form</span>
+          <v-card-text class="headline">Membership Form</v-card-text>
         </v-card-title>
         <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-           <v-flex xs3 sm3>
+          <v-container>
+              <form @submit.prevent="register">
+           <v-flex xs12>
                 <v-select
                   label="Title"
                   v-model="signup.title"
@@ -27,24 +27,27 @@
                   :items="['Mr', 'Mrs', 'Dr', 'Prof', 'Other']"
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="signup.surname" label="Surname" required></v-text-field>
+              <v-flex xs12>
+                <v-text-field v-model="signup.surname" label="Surname" required  v-validate="'required'" name="surname"></v-text-field>
+                <span>{{ errors.first('surname') }}</span>
               </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="signup.first_name" label="First Name" required></v-text-field>
+            <v-flex xs12>
+              <v-text-field  v-validate="'required'" name="name" v-model="signup.first_name" label="First Name" required></v-text-field>
+               <span>{{ errors.first('name') }}</span>
+            </v-flex>
+              <v-flex xs12>
+                <v-text-field v-validate="'required'" required name="middlename" v-model="signup.middle_name" label="Middle Name"></v-text-field>
+                <span>{{ errors.first('middlename') }}</span>
               </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="signup.middle_name" label="Middle Name"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field type="number" v-model="signup.phone" label="Phone Number"></v-text-field>
+              <v-flex xs12>
+                <v-text-field type="number" required v-model="signup.phone" label="Phone Number"></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-text-field v-model="signup.address" label="House Address" hint="example No 40 Akeem Salami street Ayobo Ipaja Lagos"
                   required
                 ></v-text-field>
               </v-flex>
-               <v-flex xs3 sm3>
+               <v-flex xs12>
                 <v-select
                  v-model="signup.convicted"
                   label="convicted?"
@@ -54,22 +57,22 @@
                   :items="['No', 'Yes']"
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm6>
+              <v-flex xs12 >
                 <v-text-field 
                 v-model="signup.employer"
                  label="Employer/School"
                 hint="Full name of employer/school"
                  required></v-text-field> 
               </v-flex>
-                <v-flex xs12 sm6>
+                <v-flex xs12>
                 <v-text-field
                 v-model="signup.recommender"
                  label="Recommender"
                 hint="Recommender Membership code"
-                type="number"
+                type="text"
                  required></v-text-field> 
               </v-flex>
-               <v-flex xs3 sm3>
+               <v-flex xs3>
                 <v-select
                 v-model="signup.apply"
                   label="I Apply For"
@@ -77,7 +80,7 @@
                   :items="['Student', 'Fellow', 'Active', 'Associate']"
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm6>
+              <v-flex xs12 >
                 <v-select
                 v-model="signup.expertise"
                   label="AREAS OF EXPERTISE"
@@ -97,22 +100,23 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12>
-                <input type="file" style="display:none" @change="loadImg"  ref="imageInput"> 
-               <v-btn large outline color="blue-grey" @click='pickImage'>Add Image</v-btn>
+                <input required type="file" style="display:none" @change="loadImg"  ref="imageInput"> 
+               <v-btn block outline color="info" @click='pickImage'>Add Image</v-btn>
               </v-flex>
                 <v-card>
                     <img :src="img" height="300px">
                 </v-card>
-              </v-layout>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
+
+           <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="home">Close</v-btn>
-          <v-btn color="blue darken-1"   @click="register">Register</v-btn>
+          <input class="btn"  type="submit" value="Register">
           <v-spacer></v-spacer>
         </v-card-actions>
+
+              </form>
+          </v-container>
+        </v-card-text>
       </v-card>
 </v-container>
 </template>
@@ -161,7 +165,9 @@ import swal from 'sweetalert'
           }
        },
     async register () {
-        let imgurl = ''
+       this.$validator.validateAll()
+       .then( () =>{
+          let imgurl = ''
         let key = ''
        var d = new Date();
        var n = d.getFullYear();
@@ -171,7 +177,7 @@ import swal from 'sweetalert'
       this.signup.userid = firebase.auth().currentUser.uid 
       this.signup.email = firebase.auth().currentUser.email 
       var userid = firebase.auth().currentUser.uid 
-    await firebase.database().ref('Member/').once('value')
+     firebase.database().ref('Member/').once('value')
       .then( (data) => {
        var z = data.val()
         const val = []
@@ -181,7 +187,7 @@ import swal from 'sweetalert'
         })
        }
        var x = val.length
-        this.signup.Reg_No = `AFPN/${n}/${m}/0${x}`
+        this.signup.Reg_No = `AFPN${n}${m}0${x}`
           const filename = this.signup.imgurl.name
           const ext = filename.slice(filename.lastIndexOf('.'))
           var storageRef = firebase.storage().ref();
@@ -216,6 +222,8 @@ import swal from 'sweetalert'
               })
             });
       })
+       })
+       
     },
     home () {
        this.$router.push('/')
@@ -227,6 +235,7 @@ import swal from 'sweetalert'
       }
     },
     mounted() {
+      this.$store.dispatch('getuser')
       this.$store.dispatch('formpayment')
     }
   }
@@ -240,6 +249,9 @@ import swal from 'sweetalert'
   width: 150px;
   padding: 10px;
   align-items: center;
+}
+span{
+  color: red;
 }
 .pay{
   background-color: rgb(39, 116, 141);

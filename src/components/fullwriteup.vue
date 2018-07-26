@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition" :overlay="false">
  
       <v-btn flat outline slot="activator" dark>Raed Now</v-btn>
-      <v-card>
+      <v-card class="bak">
         <v-toolbar dark color="cyan darken-3">
           <v-btn icon @click.native="dialog = false" dark>
             <v-icon>close</v-icon>
@@ -24,11 +24,11 @@
           align-center
         >
           <v-flex text-xs-center>
-         <h1>LOADING>>>>></h1>
+         <h1>LOADING...</h1>
     <v-layout wrap="" class="content">                    
      <div class="con">
                 <p>
-                  Loading....
+                  ..
               </p>
      </div>
       <v-toolbar flat class="transparent">
@@ -38,9 +38,17 @@
            <img src="https://firebasestorage.googleapis.com/v0/b/afpn-906a9.appspot.com/o/noimage.jpg?alt=media&token=a3be3edc-eb2c-4b40-9aaf-7542a130dfc4" >
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title>Loading...</v-list-tile-title>
+            <v-list-tile-title>
+            </v-list-tile-title>
           </v-list-tile-content> 
         </v-list-tile>
+        <v-card>
+          <v-progress-circular
+                  :size="100"
+                  color="info"
+                  indeterminate
+                ></v-progress-circular>
+        </v-card>
       </v-list>
     </v-toolbar>
      </v-layout>
@@ -75,5 +83,8 @@
  .home{
    cursor: pointer;
    color: rgb(11, 20, 153) !important;
+ }
+ .bak{
+   background-color: #181818;
  }
 </style>
