@@ -24,9 +24,9 @@ import firebase from 'firebase'
     data () {
       return {
           dialog: false,
-         paystackBtnText: "Pay Me, My Money",
+         paystackBtnText: "Click Form Payment",
           paystackkey: "pk_test_593b7f5f9deeb839ade80e68d7505967546acb6f", //paystack public key
-          email: "afpn.web@gmail.com", // Customer email
+          email: "", // Customer email
           amount: 1000000 // in kobo
       }
     },
@@ -39,11 +39,7 @@ import firebase from 'firebase'
           text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;
-      },
-      myemail() {
-        return this.email = firebase.auth().currentUser.email
       }
-  
     },
     methods: {
       callback: function(response){
@@ -67,7 +63,7 @@ import firebase from 'firebase'
       }
     },
     created(){
-      this.myemail
+      this.email = firebase.auth().currentUser.email
     }
   }
 </script>
